@@ -2,11 +2,12 @@ package com.mkyong.controller;
 
 import com.mkyong.model.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,33 +19,27 @@ public class WelcomeController {
     @Value("${welcome.message}")
     private String message;
 
-    private List<String> tasks = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
+    private User user;
 
     @GetMapping("/")
     @CrossOrigin(origins = "http://localhost:3000")
-    public String main(Model model) {
-        model.addAttribute("message", message);
-        model.addAttribute("tasks", tasks);
-
+    public String main(@ModelAttribute User user, Model model) {
+        model.addAttribute("user", user);
         return "multipage"; //view
     }
 
-    // /hello?name=kotlin
-    @GetMapping("/hello")
+    @GetMapping("/user")
     @CrossOrigin(origins = "http://localhost:3000")
-    public String mainWithParam(
-            @RequestParam(name = "name", required = false, defaultValue = "") String name, Model model) {
-
-        model.addAttribute("message", name);
-
-        return "welcome"; //view
+    public String user(Model model) {
+        model.addAttribute("user", user);
+        return "userPage"; //view
     }
 
     @PostMapping("/users")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<?> postUser(@RequestBody User author) throws Exception {
-        return new ResponseEntity<>(author, HttpStatus.CREATED);
+    public String postUser(@ModelAttribute User user) throws Exception {
+        System.out.println(user);
+        this.user = user;
+        return "redirect:/user";
     }
-
-
 }

@@ -32,7 +32,7 @@ function nextPrev(n) {
   // if you have reached the end of the form...
   if (currentTab >= x.length) {
     // ... the form gets submitted:
-    sendPostRequest();
+    ajaxSubmitForm();
 //    document.getElementById("regForm").submit();
     return false;
   }
@@ -72,47 +72,41 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
 console.log("Document Get ready ...");
-//$(document).ready(function(){
-//console.log("Document Get ready ... ");
-//    $("form").on("submit", function(event){
-//    console.log("Submitting ...")
-//        event.preventDefault();
-//
-////        var formValues= $(this).serialize();
-//
-//    });
-//});
-function sendPostRequest(){
-        var data  = getFormData($("#regForm"));
-        console.log(data, "before sending")
-//        $.post(
-//        "http://localhost:8080/users",
-//         data,
-//         dataType: "json",
-//        ).done(function(data){
-//
-//        });
 
-   $.ajax({
-            url: 'http://localhost:8080/users',
-            type: 'post',
-            dataType: 'json',
-            contentType: 'application/json',
-            success: function (data) {
-                        console.log(data);
-            },
-            data: JSON.stringify(data)
-        });
+function ajaxSubmitForm() {
 
-}
+    // Get form
+    var form = $('#fileUploadForm')[0];
 
-function getFormData($form){
-    var unindexed_array = $form.serializeArray();
-    var indexed_array = {};
+    var data = new FormData(form);
 
-    $.map(unindexed_array, function(n, i){
-        indexed_array[n['name']] = n['value'];
+    $("#submitButton").prop("disabled", true);
+
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/users",
+        data: data,
+                    dataType: 'json',
+
+        // prevent jQuery from automatically transforming the data into a query string
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 1000000,
+        success: function(data, textStatus, jqXHR) {
+
+            $("#result").html(data);
+            console.log("SUCCESS : ", data);
+            $("#submitButton").prop("disabled", false);
+            $('#fileUploadForm')[0].reset();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+
+            $("#result").html(jqXHR.responseText);
+            console.log("ERROR : ", jqXHR.responseText);
+            $("#submitButton").prop("disabled", false);
+
+        }
     });
 
-    return indexed_array;
 }

@@ -88,43 +88,19 @@ button:hover {
 </style>
 <body>
 
-<form id="fileUploadForm" action="" th:object="${user}">
-    <h1>Register:</h1>
-    <div class="tab">
-        Name:
-        <p><input placeholder="First name..." th:field="*{firstName}"/></p>
-        <p><input placeholder="Last name..." th:field="*{lastName}"/></p>
-    </div>
-    <div class="tab">
-        Contact Info:
-        <p><input placeholder="E-mail..." th:field="*{email}"/></p>
-        <p><input placeholder="Phone..." th:field="*{phone}"/></p>
-    </div>
-    <div class="tab">
-       Birthday:
-        <p><input placeholder="dd" th:field="*{day}"/></p>
-        <p><input placeholder="mm" th:field="*{month}"/></p>
-        <p><input placeholder="yyyy" th:field="*{year}"/></p>
-    </div>
-    <div class="tab">
-        Login Info:
-        <p><input placeholder="Username..." th:field="*{username}"/></p>
-        <p><input placeholder="Password..." th:field="*{password}"/></p>
-    </div>
-    <div style="overflow:auto;">
-        <div style="float:right;">
-            <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-            <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
-        </div>
-    </div>
-    <div style="text-align:center;margin-top:40px;">
-        <span class="step"></span>
-        <span class="step"></span>
-        <span class="step"></span>
-        <span class="step"></span>
-    </div>
-</form>
-<div id="result"></div>
-<script type="text/javascript" src="http://localhost:8080/js/form.js"></script>
+<table>
+    <tbody>
+    <tr>
+        <td><span> FullName </span></td>
+        <td><span th:text="${user.firstName}"/>
+            <span th:text="${user.lastName}"/></td>
+    </tr>
+    <tr>
+        <td><span> Email </span></td>
+        <td><span th:text="${user.email}"/></td>
+    </tr>
+    </tbody>
+</table>
+
 </body>
 </html>
